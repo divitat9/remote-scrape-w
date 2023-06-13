@@ -1,0 +1,143 @@
+
+   .final-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    background-color: #f5f5f5;
+    height: 90vh;
+  }
+  
+  .final-page-banner {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  background-color: #0c5e9c;
+  color: white;
+  font-weight: bold;
+  font-size: 50px;
+  border-radius: 4px;
+  text-align: center;
+  word-wrap: break-word;
+  position: fixed;
+  top: calc(8px + 3vh);
+  padding-left: 20px;
+  height: 70px;
+  }
+  
+  .final-page-banner::before {
+    content: "";
+    display: inline-block;
+    width: 70px; 
+    height: 70px;
+    background-image: url('./icons/logo.png'); 
+    background-size: cover;
+    margin-right: 25px; 
+  }
+
+  .final-page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .final-page-logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .final-page-input {
+    margin-bottom: 20px;
+  }
+
+  .final-page-h1 {
+    font-size: 20px;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bolder;
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+
+  .final-page-h2 {
+    font-size: 16px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    max-width: 600px;
+  }
+
+  .final-page-input input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #258cdb;
+    border-radius: 4px;
+    width: 300px;
+  }
+  
+  .final-page-button {
+    padding: 12px 24px;
+    background-color: #258cdb;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .final-page-button:hover {
+    background-color: #063559;
+  }
+  
+
+  @media only screen and (max-width: 900px) {
+    .final-page-h2 {
+      font-size: 14px;
+    }
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .final-page-banner {
+      font-size: 30px;
+    }
+
+    .final-page-container {
+      padding: 30px;
+    }
+    
+    .final-page-logo {
+      width: 150px;
+    }
+  
+    .final-page-button {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  
+    .final-page-h1 {
+      font-size: 18px;
+    }
+  
+    .final-page-h2 {
+      font-size: 14px;
+    }
+  }
+  
+  @media only screen and (max-width: 400px) {
+
+    .final-page-logo {
+      width: 120px;
+    }
+  
+    .final-page-input input {
+      width: 200px;
+    }
+  }  
