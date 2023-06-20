@@ -3,7 +3,7 @@ require('dotenv').config();
 const msalConfig = {
     auth: {
       clientId: process.env.CLIENT_ID,
-      authority: 'https://login.microsoftonline.com/69c2a6e8-2702-4620-ab88-a0b9a5ce7ddd',
+      authority: 'https://login.microsoftonline.com/common',
       clientSecret: process.env.CLIENT_SECRET,
     },
     system: {
@@ -17,7 +17,7 @@ const msalConfig = {
     },
   };
   
-  const REDIRECT_URI = process.env.REDIRECT_URI;
+  const REDIRECT_URI = 'http://localhost:3000/outlook-auth/callback';
   const POST_LOGOUT_REDIRECT_URI = process.env.POST_LOGOUT_REDIRECT_URI;
   const GRAPH_ME_ENDPOINT = process.env.GRAPH_API_ENDPOINT + "v1.0/me";
   

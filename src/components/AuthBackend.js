@@ -84,16 +84,20 @@ app.get('/outlook-auth', (req, res) => {
     res.status(500).send('An error occurred during the Outlook authentication process.');
   });
 });
-
+console.log("here1");
 // Callback handler for successful Outlook authentication
 app.get('/outlook-auth/callback', (req, res) => {
+  console.log("here2");
   const tokenRequest = {
     code: req.query.code,
     scopes: scopesoutlook,
-    redirectUri: 'http://localhost:3000/outlookauth',
+    redirectUri: 'http://localhost:3000/outlook-auth/callback',
   };
 
+  console.log(tokenRequest);
+
   pca.acquireTokenByCode(tokenRequest).then((response) => {
+    console.log(response.accessToken);
     // Use the acquired access token to call the Microsoft Graph API
     const graphRequest = {
       method: 'GET',
