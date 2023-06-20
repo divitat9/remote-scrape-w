@@ -4,7 +4,7 @@ const open = require('open');
 const path = require('path');
 const fs = require('fs');
 const { msalConfig } = require('./AuthConfig.js');
-const { PublicClientApplication } = require('@azure/msal-node');
+const {ConfidentialClientApplication } = require('@azure/msal-node');
 const axios = require('axios');
 const app = express();
 const port = 3000;
@@ -65,7 +65,7 @@ app.get('/google-success', (req, res) => {
 // -------------------------
 
 // Create a new MSAL instance for Outlook
-const pca = new PublicClientApplication(msalConfig);
+const pca = new ConfidentialClientApplication(msalConfig);
 
 const scopesoutlook = [
   'user.read'
@@ -75,7 +75,7 @@ const scopesoutlook = [
 app.get('/outlook-auth', (req, res) => {
   const authCodeUrlParameters = {
     scopes: scopesoutlook,
-    redirectUri: 'http://localhost:3000/outlookauth',
+    redirectUri: 'http://localhost:3000/outlook-auth/callback',
   };
   pca.getAuthCodeUrl(authCodeUrlParameters).then((response) => {
     res.redirect(response);
@@ -88,6 +88,7 @@ console.log("here1");
 // Callback handler for successful Outlook authentication
 app.get('/outlook-auth/callback', (req, res) => {
   console.log("here2");
+  //console.log(req);
   const tokenRequest = {
     code: req.query.code,
     scopes: scopesoutlook,
@@ -110,6 +111,7 @@ app.get('/outlook-auth/callback', (req, res) => {
     // Make the request to the Graph API endpoint
     axios(graphRequest).then((graphResponse) => {
       console.log(graphResponse.data);
+      res.redirect(`http://localhost:${frontendPort}/success`);
       res.send('Outlook authentication successful! You can close this tab.');
     }).catch((error) => {
       console.error('Error accessing Microsoft Graph API:', error);
