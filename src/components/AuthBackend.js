@@ -9,10 +9,11 @@ const axios = require('axios');
 const app = express();
 const port = 3000;
 const frontendPort = 3001;
+const globals = require('./globals');
 
-// -------------------------
-// Google Login
-// -------------------------
+/* 
+ * Google Login
+ */  
 
 // Storing credentials for Google
 const keyPath = path.join(__dirname, 'key.json');
@@ -48,6 +49,11 @@ app.get('/google-auth/callback', async (req, res) => {
   try {
     const { tokens } = await googleOauth2Client.getToken(code);
     googleOauth2Client.setCredentials(tokens);
+    globals.setProvider("googleauth");
+    globals.setGAuth(tokens.access_token);
+    (async () => {
+      await globals.encryptCredential("googleauth");
+    })();
     res.redirect(`http://localhost:${frontendPort}/success`);
   } catch (error) {
     console.error('Error authenticating with Google:', error);
@@ -60,9 +66,9 @@ app.get('/google-success', (req, res) => {
   res.send('Google authentication successful! You can close this tab.');
 });
 
-// -------------------------
-// Outlook Login
-// -------------------------
+/* 
+ * Outlook Login
+ */ 
 
 // Create a new MSAL instance for Outlook
 const pca = new ConfidentialClientApplication(msalConfig);
@@ -84,18 +90,15 @@ app.get('/outlook-auth', (req, res) => {
     res.status(500).send('An error occurred during the Outlook authentication process.');
   });
 });
-console.log("here1");
+
+
 // Callback handler for successful Outlook authentication
 app.get('/outlook-auth/callback', (req, res) => {
-  console.log("here2");
-  //console.log(req);
   const tokenRequest = {
     code: req.query.code,
     scopes: scopesoutlook,
     redirectUri: 'http://localhost:3000/outlook-auth/callback',
   };
-
-  console.log(tokenRequest);
 
   pca.acquireTokenByCode(tokenRequest).then((response) => {
     console.log(response.accessToken);
@@ -107,25 +110,28 @@ app.get('/outlook-auth/callback', (req, res) => {
         Authorization: `Bearer ${response.accessToken}`,
       },
     };
-
+    globals.setProvider("outlookauth");
+    globals.setGAuth(response.accessToken);
+    (async () => {
+      await globals.encryptCredential("outlookauth");
+    })();
+    res.redirect(`http://localhost:${frontendPort}/success`);
     // Make the request to the Graph API endpoint
-    axios(graphRequest).then((graphResponse) => {
-      console.log(graphResponse.data);
-      res.redirect(`http://localhost:${frontendPort}/success`);
-      res.send('Outlook authentication successful! You can close this tab.');
-    }).catch((error) => {
-      console.error('Error accessing Microsoft Graph API:', error);
-      res.status(500).send('Error occurred while accessing Microsoft Graph API.');
-    });
+    // axios(graphRequest).then((graphResponse) => {
+    //   console.log(graphResponse.data);
+    // }).catch((error) => {
+    //   console.error('Error accessing Microsoft Graph API:', error);
+    //   res.status(500).send('Error occurred while accessing Microsoft Graph API.');
+    // });
   }).catch((error) => {
     console.error('Error acquiring token for Outlook:', error);
     res.status(500).send('Error occurred during Outlook authentication.');
   });
 });
 
-// -------------------------
-// Express Server
-// -------------------------
+/* 
+ * Express Server
+ */ 
 
 // Starts the Express server on the specified port
 app.listen(port, () => {

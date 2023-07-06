@@ -4,12 +4,15 @@
   "private": true,
   "dependencies": {
     "@azure/msal-node": "^1.17.3",
+    "@babel/plugin-proposal-private-property-in-object": "*",
+    "@originjs/crypto-js-wasm": "^1.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "googleapis": "^118.0.0",
     "opn": "^6.0.0",
+    "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.12.0",
@@ -19,9 +22,11 @@
   },
   "scripts": {
     "start": "export SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
-   "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+    "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "compile-assemblyscript": "npx asc src/components/encryption.ts --target wasm --outFile src/components/encryption.wasm",
+    "compile-as": "npx asc -O -b encryption.wasm --exportRuntime src/components/encryption.ts ./node_modules/as-bind/lib/assembly/as-bind.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +47,13 @@
     ]
   },
   "devDependencies": {
-    "electron": "^25.1.0"
+    "assemblyscript": "^0.27.5",
+    "electron": "^25.1.0",
+    "typescript": "^4.5.4"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   }
 }

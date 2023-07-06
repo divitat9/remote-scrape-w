@@ -9,11 +9,25 @@ import aolicon from './icons/aol-icon.png';
 
 function HomePage() {
   const handleGoogleAuth = () => {
-    window.location.href = 'http://localhost:3000/google-auth';
+    const storedCredential = localStorage.getItem('encryptedCredential');
+    if (storedCredential) {
+      // Encrypted credential exists, redirect to Success page
+      console.log("relogin");
+      window.location.href = '/success';
+    } else {
+      window.location.href = 'http://localhost:3000/google-auth';
+    }
   };
 
   const handleOutlookAuth = () => {
-    window.location.href = 'http://localhost:3000/outlook-auth';
+    const storedCredential = localStorage.getItem('encryptedCredential');
+    if (storedCredential) {
+      // Encrypted credential exists, redirect to Success page
+      console.log("relogin");
+      window.location.href = '/success';
+    } else {
+      window.location.href = 'http://localhost:3000/outlook-auth';
+    }
   };
 
  return (
