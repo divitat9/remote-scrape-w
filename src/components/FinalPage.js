@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './FinalPage.css';
 import gmailicon from './icons/gmail.png';
 import { Link } from 'react-router-dom';
-const globals = require('./globals');
+import globals from './globals.js';
 
 
 function FinalPage() {
@@ -35,8 +35,9 @@ function FinalPage() {
     const validPassword = validatePassword(password);
   
     if (validEmail && validPassword) {
-      globals.setProvider("googleimap");
+      globals.setProvider("gmail-imap");
       globals.setImap(email + ":" + password);
+      
       setIsValidInputs(true);
     } else {
       setIsValidInputs(false);

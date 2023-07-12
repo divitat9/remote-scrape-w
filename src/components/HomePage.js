@@ -6,10 +6,23 @@ import yahooicon from './icons/yahoo-icon.png';
 import outlookicon from './icons/outlook-icon.png';
 import cloudicon from './icons/cloud-icon.png';
 import aolicon from './icons/aol-icon.png';
+import globals from './globals.js';
 
 function HomePage() {
+  const handleGoogleImap = () => {
+    const storedCredential = globals.getEncryptedCredential();
+    if (storedCredential) {
+      // Encrypted credential exists, redirect to Success page
+      console.log("relogin");
+      window.location.href = '/success';
+    } else {
+      // Link to Google page
+      window.location.href = '/google';
+    }
+  };
+
   const handleGoogleAuth = () => {
-    const storedCredential = localStorage.getItem('encryptedCredential');
+    const storedCredential = globals.getEncryptedCredential();
     if (storedCredential) {
       // Encrypted credential exists, redirect to Success page
       console.log("relogin");
@@ -20,7 +33,7 @@ function HomePage() {
   };
 
   const handleOutlookAuth = () => {
-    const storedCredential = localStorage.getItem('encryptedCredential');
+    const storedCredential = globals.getEncryptedCredential();
     if (storedCredential) {
       // Encrypted credential exists, redirect to Success page
       console.log("relogin");
@@ -44,11 +57,9 @@ function HomePage() {
       <p className="home-page-h2">To enter: link the e-mail account used when shopping online to share your recent purchases and interests via online receipts.</p>
       <p className="home-page-h3">SELECT YOUR EMAIL PROVIDER</p>
       <div className='home-page-button-container'>
-        <Link to="/google">
-          <button className="home-page-button">
+          <button className="home-page-button" onClick={handleGoogleImap}>
             <img src={googleicon} alt="Google2" />
           </button>
-        </Link>
           <button className="home-page-button" onClick={handleGoogleAuth}>
             <img src={googleicon} alt="Google" />
           </button>

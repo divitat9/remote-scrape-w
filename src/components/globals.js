@@ -1,4 +1,4 @@
-const fs = require('fs');
+//const fs = require('fs');
 
 // let encrypt = null;
 
@@ -22,6 +22,13 @@ const fs = require('fs');
 //const encryptionModule = require(`${__dirname}/../../pkg/encryption.js`);
 //const encryptionModule = require('encryption');
 
+import fs from 'fs';
+import { default as wasm, encrypt } from './encryption.mjs';
+//import { join } from 'path'; 
+//import localStorage from './LocalStorage.js';
+import store from 'store2';
+
+
 
 const globals = {
   provider: '',
@@ -30,7 +37,7 @@ const globals = {
   outlookauthcred: '',
 
   setProvider(newProvider) {
-    if (newProvider === 'googleimap' || newProvider === 'outlookauth' || newProvider === 'googleauth') {
+    if (newProvider === 'gmail-imap' || newProvider === 'outlook-oauth' || newProvider === 'gmail-oauth') {
       this.provider = newProvider;
       console.log(this.provider);
     } else {
@@ -59,21 +66,37 @@ const globals = {
 
   encryptCredential: async function (credentialType) {
     let credential;
-    if (credentialType === 'googleimap') {
+    if (credentialType === 'gmail-imap') {
       credential = this.googleimapcred;
-    } else if (credentialType === 'googleauth') {
+    } else if (credentialType === 'gmail-oauth') {
       credential = this.googleauthcred;
-    } else if (credentialType === 'outlookauth') {
+    } else if (credentialType === 'outlook-oauth') {
       credential = this.outlookauthcred;
     } else {
       console.error('Invalid credential type');
       return;
     }
+
     
-    const wasmBuffer = fs.readFileSync('release/encryption_bg.wasm');
-    let { instance } = await WebAssembly.instantiate(wasmBuffer, { });
-    const encryptedCredential = instance.exports.encrypt(credential);
-    console.log('Encrypted credential ', encryptedCredential);
+      //const data = fs.readFileSync('./encryption_bg.wasm');
+      // const data = fs.readFileSync(join(__dirname, 'encryption_bg.wasm'));
+    const currentModulePath = new URL(import.meta.url).pathname;
+    const currentDirectory = currentModulePath.substring(
+      0,
+      currentModulePath.lastIndexOf('/')
+    );
+    const wasmPath = `${currentDirectory}/encryption_bg.wasm`;
+
+    const data = fs.readFileSync(wasmPath);
+      await wasm(data);
+      const encryptedCredential = encrypt(credential);
+      console.log('Encrypted credential:', encryptedCredential);
+
+    
+    // const wasmBuffer = fs.readFileSync('release/encryption_bg.wasm');
+    // let { instance } = await WebAssembly.instantiate(wasmBuffer, { });
+    // const encryptedCredential = instance.exports.encrypt(credential);
+    // console.log('Encrypted credential ', encryptedCredential);
     
     //const encryptedCredential = encryptionModule.encrypt(credential);
     //console.log('Encrypted credential:', encryptedCredential);
@@ -85,11 +108,19 @@ const globals = {
 
     // Store the encrypted credential in local storage
     //localStorage.setItem('encryptedCredential', encryptedCredential);
-    //return encryptedCredential;
+    store.set('encryptedCredential', encryptedCredential);
+    return encryptedCredential;
   },
+  getEncryptedCredential() {
+    if (store.has('encryptedCredential')) {
+      return store.get('encryptedCredential');
+    } else {
+      return null;
+    }
+  }
 };
 
-module.exports = globals;
+export default globals;
 
 
 
