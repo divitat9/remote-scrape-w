@@ -23,7 +23,7 @@
 //const encryptionModule = require('encryption');
 
 import fs from 'fs';
-import { default as wasm, encrypt } from './encryption.mjs';
+import { default as wasm, encrypt, init_panic_hook} from './encryption.mjs';
 //import { join } from 'path'; 
 //import localStorage from './LocalStorage.js';
 import store from 'store2';
@@ -89,6 +89,7 @@ const globals = {
 
     const data = fs.readFileSync(wasmPath);
       await wasm(data);
+      init_panic_hook();
       const encryptedCredential = encrypt(credential);
       console.log('Encrypted credential:', encryptedCredential);
 
