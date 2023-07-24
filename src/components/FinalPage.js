@@ -3,6 +3,7 @@ import './FinalPage.css';
 import gmailicon from './icons/gmail.png';
 import { Link } from 'react-router-dom';
 import globals from './globals.js';
+import axios from 'axios';
 
 
 function FinalPage() {
@@ -36,9 +37,23 @@ function FinalPage() {
   
     if (validEmail && validPassword) {
       globals.setProvider("gmail-imap");
+      console.log("Provider set to: ", globals.getProvider());
       globals.setImap(email + ":" + password);
-      
+
+
+      console.log(globals); 
+    console.log(globals.getProvider());
+
+      axios.get('http://localhost:3000/google-imap')
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+      });
+
       setIsValidInputs(true);
+
     } else {
       setIsValidInputs(false);
       if (!validEmail) {

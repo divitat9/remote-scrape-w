@@ -1,34 +1,8 @@
-//const fs = require('fs');
-
-// let encrypt = null;
-
-// const importObject = {
-//   imports: {
-//     imported_func(arg) {
-//       console.log(arg);
-//     },
-//   },
-// };
-
-// const loadWebAssembly = async () => {
-//   if (!encrypt) {
-//     const wasmBuffer = fs.readFileSync(`${__dirname}/../../pkg/encryption_bg.wasm`);
-//     const module = await WebAssembly.instantiate(wasmBuffer, importObject);
-//     encrypt = module.instance.exports.encrypt;
-//     console.log(module.instance.exports);
-//   }
-// };
-
-//const encryptionModule = require(`${__dirname}/../../pkg/encryption.js`);
-//const encryptionModule = require('encryption');
-
 import fs from 'fs';
 import { default as wasm, encrypt, init_panic_hook} from './encryption.mjs';
-//import { join } from 'path'; 
-//import localStorage from './LocalStorage.js';
 import store from 'store2';
 
-
+//Centralized module for managing, storing, and encrypting email credentials.
 
 const globals = {
   provider: '',
@@ -64,55 +38,52 @@ const globals = {
     console.log(this.outlookauthcred);
   },
 
-  encryptCredential: async function (credentialType) {
+  encryptCredential: async function (providerType) {
+    //Function to encrypt credentials using the encryption wasm module, requires input of provider type
+    
     let credential;
-    if (credentialType === 'gmail-imap') {
+
+    //Checking for validity of provider
+    if (providerType === 'gmail-imap') {
       credential = this.googleimapcred;
-    } else if (credentialType === 'gmail-oauth') {
+    } else if (providerType === 'gmail-oauth') {
       credential = this.googleauthcred;
-    } else if (credentialType === 'outlook-oauth') {
+    } else if (providerType === 'outlook-oauth') {
       credential = this.outlookauthcred;
     } else {
       console.error('Invalid credential type');
       return;
     }
 
-    
-      //const data = fs.readFileSync('./encryption_bg.wasm');
-      // const data = fs.readFileSync(join(__dirname, 'encryption_bg.wasm'));
+    //Navigating to wasm module in file structure
     const currentModulePath = new URL(import.meta.url).pathname;
     const currentDirectory = currentModulePath.substring(
       0,
       currentModulePath.lastIndexOf('/')
     );
     const wasmPath = `${currentDirectory}/encryption_bg.wasm`;
-
+    
+    //Reading wasm module for data
     const data = fs.readFileSync(wasmPath);
-      await wasm(data);
-      init_panic_hook();
-      const encryptedCredential = encrypt(credential);
-      console.log('Encrypted credential:', encryptedCredential);
+    await wasm(data);
 
-    
-    // const wasmBuffer = fs.readFileSync('release/encryption_bg.wasm');
-    // let { instance } = await WebAssembly.instantiate(wasmBuffer, { });
-    // const encryptedCredential = instance.exports.encrypt(credential);
-    // console.log('Encrypted credential ', encryptedCredential);
-    
-    //const encryptedCredential = encryptionModule.encrypt(credential);
-    //console.log('Encrypted credential:', encryptedCredential);
+    //Initialize a panic hook to handle runtime errors/panic conditions in Rust encryption file
+    init_panic_hook();
 
-    // await loadWebAssembly();
+    //Encrypt the credentials using the encrypt function from the wasm module
+    const hexCred = encrypt(credential);
+    console.log('Hex credential:', hexCred);
+    const encryptedCredential = Buffer.from(hexCred, 'hex').toString('base64');
+    console.log('Encrypted credential:', encryptedCredential);
 
-    // const encryptedCredential = encrypt(credential);
-    // console.log('Encrypted credential:', encryptedCredential);
-
-    // Store the encrypted credential in local storage
-    //localStorage.setItem('encryptedCredential', encryptedCredential);
+    //Store the encrypted credential in local storage using the store2 library
     store.set('encryptedCredential', encryptedCredential);
+
     return encryptedCredential;
   },
+
   getEncryptedCredential() {
+    //If a encrypted credential already exists in local storage, return that
     if (store.has('encryptedCredential')) {
       return store.get('encryptedCredential');
     } else {

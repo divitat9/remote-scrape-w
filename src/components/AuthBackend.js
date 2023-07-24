@@ -18,16 +18,18 @@ import fs from 'fs';
 import { msalConfig } from './AuthConfig.js';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 import axios from 'axios';
+import cors from 'cors';
 
 const app = express();
 const port = 3000;
 const frontendPort = 3001;
 import globals from './globals.js';
 import { create } from 'domain';
+app.use(cors());
 
 
 /* 
- * Google Login
+ * Google OAuth Login
  */
 
 // Storing credentials for Google
@@ -76,7 +78,7 @@ app.get('/google-auth/callback', async (req, res) => {
     globals.setGAuth(tokens.access_token);
     (async () => {
       await globals.encryptCredential("gmail-oauth");
-      await createJob();
+      await createJob("gmail-oauth");
     })();
     res.redirect(`http://localhost:${frontendPort}/success`);
   } catch (error) {
@@ -88,6 +90,27 @@ app.get('/google-auth/callback', async (req, res) => {
 // Route handler for successful Google authentication
 app.get('/google-success', (req, res) => {
   res.send('Google authentication successful! You can close this tab.');
+});
+
+/* 
+ * Google IMAP Login
+ */
+
+// Route handler for starting Google IMAP authentication and job creation
+app.get('/google-imap', async (req, res) => {
+  try {
+    // Encrypt the credentials
+    await globals.encryptCredential("gmail-imap");
+
+    // Create a job
+    await createJob("gmail-imap");
+
+    res.status(200).send("Google IMAP authentication and job creation successful!");
+    
+  } catch (error) {
+    console.error("Error occurred during Google IMAP authentication and job creation:", error);
+    res.status(500).send("Error occurred during Google IMAP authentication and job creation.");
+  }
 });
 
 /* 
@@ -135,10 +158,10 @@ app.get('/outlook-auth/callback', (req, res) => {
       },
     };
     globals.setProvider("outlook-oauth");
-    globals.setGAuth(response.accessToken);
+    globals.setOAuth(response.accessToken);
     (async () => {
       await globals.encryptCredential("outlook-oauth");
-      await createJob();
+      await createJob("outlook-oauth");
     })();
     res.redirect(`http://localhost:${frontendPort}/success`);
     // Make the request to the Graph API endpoint
@@ -155,11 +178,10 @@ app.get('/outlook-auth/callback', (req, res) => {
 });
 
 // Function to encrypt credentials and create a job
-async function createJob() {
+async function createJob(provider) {
   try {
     const apiToken = process.env.API_TOKEN;
     const encryptedCreds = globals.getEncryptedCredential();
-    const provider = globals.getProvider();
 
     const response = await fetch('https://scan.blinkreceipt.com/ereceipts/create_job', {
       method: 'POST',
