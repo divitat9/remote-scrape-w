@@ -38,7 +38,8 @@ pub fn encrypt(input: &str) -> Result<String, JsValue> {
 
     let pos = plaintext.len();
 
-    let mut buffer = [0u8; 256];
+    // let mut buffer = [0u8; 256];
+    let mut buffer = vec![0u8; pos];
 
     buffer[..pos].copy_from_slice(plaintext);
 
