@@ -13,7 +13,7 @@ const globals = {
   setProvider(newProvider) {
     if (newProvider === 'gmail-imap' || newProvider === 'outlook-oauth' || newProvider === 'gmail-oauth') {
       this.provider = newProvider;
-      console.log(this.provider);
+      console.log("Provider Name:" + this.provider);
     } else {
       console.error('Invalid provider value');
     }
@@ -25,22 +25,21 @@ const globals = {
 
   setImap(newimapcred) {
     this.googleimapcred = newimapcred;
-    console.log(this.googleimapcred);
+    console.log("Unencrypted Credential:" + this.googleimapcred);
   },
 
   setGAuth(newgauthcred) {
     this.googleauthcred = newgauthcred;
-    console.log(this.googleauthcred);
+    console.log("Unencrypted Credential:" + this.googleauthcred);
   },
 
   setOAuth(newoauthcred) {
     this.outlookauthcred = newoauthcred;
-    console.log(this.outlookauthcred);
+    console.log("Unencrypted Credential:" + this.outlookauthcred);
   },
 
   encryptCredential: async function (providerType) {
     //Function to encrypt credentials using the encryption wasm module, requires input of provider type
-    
     let credential;
 
     //Checking for validity of provider

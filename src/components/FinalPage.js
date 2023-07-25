@@ -36,20 +36,12 @@ function FinalPage() {
     const validPassword = validatePassword(password);
   
     if (validEmail && validPassword) {
-      globals.setProvider("gmail-imap");
-      console.log("Provider set to: ", globals.getProvider());
-      globals.setImap(email + ":" + password);
-
-
-      console.log(globals); 
-    console.log(globals.getProvider());
-
-      axios.get('http://localhost:3000/google-imap')
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
+      axios.post('http://localhost:3000/google-imap', { email, password })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
       });
 
       setIsValidInputs(true);

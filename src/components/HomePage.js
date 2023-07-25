@@ -6,40 +6,57 @@ import yahooicon from './icons/yahoo-icon.png';
 import outlookicon from './icons/outlook-icon.png';
 import cloudicon from './icons/cloud-icon.png';
 import aolicon from './icons/aol-icon.png';
-import globals from './globals.js';
+import axios from 'axios';
 
 function HomePage() {
-  const handleGoogleImap = () => {
-    const storedCredential = globals.getEncryptedCredential();
-    if (storedCredential) {
-      // Encrypted credential exists, redirect to Success page
-      console.log("relogin");
-      window.location.href = '/success';
-    } else {
-      // Link to Google page
-      window.location.href = '/google';
+  const handleGoogleImap = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/relogin');
+      const storedCredential = response.data.encryptedCredential;
+      console.log('Stored Credential:', storedCredential);
+      if (storedCredential) {
+        // Encrypted credential exists, redirect to Success page
+        console.log('relogin');
+        window.location.href = '/success';
+      } else {
+        // Link to Google page
+        window.location.href = '/google';
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
+  
+  const handleGoogleAuth = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/relogin');
+      const storedCredential = response.data.encryptedCredential;
+      console.log('Stored Credential:', storedCredential);
+      if (storedCredential) {
+        console.log('relogin');
+        window.location.href = '/success';
+      } else {
+        window.location.href = 'http://localhost:3000/google-auth';
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
     }
   };
 
-  const handleGoogleAuth = () => {
-    const storedCredential = globals.getEncryptedCredential();
-    if (storedCredential) {
-      // Encrypted credential exists, redirect to Success page
-      console.log("relogin");
-      window.location.href = '/success';
-    } else {
-      window.location.href = 'http://localhost:3000/google-auth';
-    }
-  };
 
-  const handleOutlookAuth = () => {
-    const storedCredential = globals.getEncryptedCredential();
-    if (storedCredential) {
-      // Encrypted credential exists, redirect to Success page
-      console.log("relogin");
-      window.location.href = '/success';
-    } else {
-      window.location.href = 'http://localhost:3000/outlook-auth';
+  const handleOutlookAuth = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/relogin');
+      const storedCredential = response.data.encryptedCredential;
+      console.log('Stored Credential:', storedCredential);
+      if (storedCredential) {
+        console.log('relogin');
+        window.location.href = '/success';
+      } else {
+        window.location.href = 'http://localhost:3000/outlook-auth';
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
     }
   };
 
