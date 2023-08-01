@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import './FinalPage.css';
 import gmailicon from './icons/gmail.png';
 import { Link } from 'react-router-dom';
-import globals from './globals.js';
 import axios from 'axios';
-
 
 function FinalPage() {
   const [email, setEmail] = useState('');
@@ -43,7 +41,7 @@ function FinalPage() {
       .catch((error) => {
         console.error(error);
       });
-
+      
       setIsValidInputs(true);
 
     } else {

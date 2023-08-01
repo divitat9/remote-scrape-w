@@ -52,3 +52,19 @@
     color: white;
     font-weight: bold;
   }
+
+  .success-page-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: #258cdb;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .success-page-button:hover {
+    background-color: #063559;
+  }

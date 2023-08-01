@@ -1,70 +1,35 @@
-# Getting Started with Create React App
+# Remote Scrape
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Remote Scrape is a web application designed to authenticate users through various email service providers (Google, Outlook), and then scrape their emails for specific information using the Microblink create job endpoint.
 
-In the project directory, you can run:
+## Installation
 
-### `npm start`
+Before starting to use Remote Scrape, ensure your environment is set up correctly by following these steps:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Clone the repository: `git clone https://github.com/username/remote-scrape.git`.
+2. Navigate into the cloned repository directory: `cd remote-scrape`.
+3. Install the required dependencies: `npm install`.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Usage
+To run both the backend and frontend in development mode, use the following command:
 
-### `npm test`
+```
+npm run dev
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This command will start the backend server on port 3000 and the frontend server on port 3001.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Please note: In order for the authentication flows to work properly, you will need to configure your OAuth credentials correctly in the appropriate configuration files.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Links
 
-### `npm run eject`
+- Repository: https://github.com/username/remote-scrape
+- Issue tracker: https://github.com/username/remote-scrape/issues
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Licensing
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+"The code in this project is licensed under MIT license."
